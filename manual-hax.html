@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hax Framework - Manual Creation</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/basic.css" rel="stylesheet" type="text/css" />
+    <script src="js/main.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/index.html">Doomfist Parkour Central</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarColor02"
+          aria-controls="navbarColor02"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor02">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/index.html"
+                >Home
+                <span class="visually-hidden">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/manual-hax.html">Manual Hax FW</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="modal" id="error-modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Uh oh!</h5>
+            <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>You must have a level selected.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="checkpoint-modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Checkpoint</h5>
+            <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div id="abilities">
+              <h5>Enable/Disable Abilities</h5>
+              <div
+                      class="btn-group"
+                      role="group"
+                      aria-label="abilities selection"
+              >
+                <input
+                        type="checkbox"
+                        class="btn-check"
+                        id="ability-1-btn"
+                        checked
+                        autocomplete="off"
+                />
+                <label
+                        class="btn btn-outline-primary"
+                        for="ability-1-btn"
+                >Seismic Slam (Ability 1)</label
+                >
+
+                <input
+                        type="checkbox"
+                        class="btn-check"
+                        id="ability-2-btn"
+                        checked
+                        autocomplete="off"
+                />
+                <label
+                        class="btn btn-outline-primary"
+                        for="ability-2-btn"
+                >Fake Upper (Ability 2)</label
+                >
+
+                <input
+                        type="checkbox"
+                        class="btn-check"
+                        id="primary-fire-btn"
+                        checked
+                        autocomplete="off"
+                />
+                <label
+                        class="btn btn-outline-primary"
+                        for="primary-fire-btn"
+                >Rocket Punch (Secondary Fire)</label
+                >
+              </div>
+              <br /><br />
+              <form id="checkpoint-vector-form">
+                <div id="checkpoint-vector" class="row">
+                  <h5>Checkpoint Vector</h5>
+
+                  <div class="col-md-4">
+                    <label for="checkpointVectorX" class="form-label"
+                    >X</label
+                    >
+                    <input
+                            type="text"
+                            class="form-control is-invalid"
+                            id="checkpointVectorX"
+                            aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label" for="checkpointVectorY"
+                    >Y</label
+                    >
+                    <input
+                            type="text"
+                            class="form-control is-invalid"
+                            id="checkpointVectorY"
+                            aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label" for="checkpointVectorZ"
+                    >Z</label
+                    >
+                    <input
+                            type="text"
+                            class="form-control is-invalid"
+                            id="checkpointVectorZ"
+                            aria-describedby="emailHelp"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div id="missions"></div>
+            <div id="effects"></div>
+            <div id="teleport"></div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+                    type="button"
+                    class="btn btn-success"
+                    id="checkpoint-submit-btn"
+            >
+              Save changes
+            </button>
+            <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+            >
+              Discard
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="checkpoint-modal-edit" data-checkpoint="">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Checkpoint</h5>
+            <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div id="abilities-edit">
+              <h5>Enable/Disable Abilities</h5>
+              <div
+                      class="btn-group"
+                      role="group"
+                      aria-label="abilities selection"
+              >
+                <input
+                        type="checkbox"
+                        class="btn-check"
+                        id="ability-1-btn-edit"
+                        checked
+                        autocomplete="off"
+                />
+                <label
+                        class="btn btn-outline-primary"
+                        for="ability-1-btn"
+                >Seismic Slam (Ability 1)</label
+                >
+
+                <input
+                        type="checkbox"
+                        class="btn-check"
+                        id="ability-2-btn-edit"
+                        checked
+                        autocomplete="off"
+                />
+                <label
+                        class="btn btn-outline-primary"
+                        for="ability-2-btn-edit"
+                >Fake Upper (Ability 2)</label
+                >
+
+                <input
+                        type="checkbox"
+                        class="btn-check"
+                        id="primary-fire-btn-edit"
+                        checked
+                        autocomplete="off"
+                />
+                <label
+                        class="btn btn-outline-primary"
+                        for="primary-fire-btn"
+                >Rocket Punch (Secondary Fire)</label
+                >
+              </div>
+              <br /><br />
+              <form id="checkpoint-vector-form-edit">
+                <div id="checkpoint-vector-edit" class="row">
+                  <h5>Checkpoint Vector</h5>
+
+                  <div class="col-md-4">
+                    <label for="checkpointVectorX" class="form-label"
+                    >X</label
+                    >
+                    <input
+                            type="text"
+                            class="form-control is-invalid"
+                            id="checkpointVectorX-edit"
+                            aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label" for="checkpointVectorY"
+                    >Y</label
+                    >
+                    <input
+                            type="text"
+                            class="form-control is-invalid"
+                            id="checkpointVectorY-edit"
+                            aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label" for="checkpointVectorZ"
+                    >Z</label
+                    >
+                    <input
+                            type="text"
+                            class="form-control is-invalid"
+                            id="checkpointVectorZ-edit"
+                            aria-describedby="emailHelp"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button
+                    type="button"
+                    class="btn btn-success"
+                    id="checkpoint-submit-btn-edit"
+            >
+              Save changes
+            </button>
+            <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+            >
+              Discard
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="level-modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Level</h5>
+            <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div class="form-group">
+              <div class="form-floating mb-3">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="level-name-input"
+                        placeholder="Level Name"
+                        required
+                />
+                <label for="map-code-input">Level Name</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+                    type="button"
+                    class="btn btn-success"
+                    id="level-modal-submit"
+            >
+              Save changes
+            </button>
+            <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+            >
+              Discard
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="full-form">
+      <div class="accordion col-6" id="form-accordion">
+        <div class="accordion-item" id="map-type">
+          <h2 class="accordion-header" id="map-type-header">
+            <button
+              class="accordion-button"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseMapType"
+              aria-expanded="true"
+              aria-controls="collapseMapType"
+            >
+              Map Type
+            </button>
+          </h2>
+          <div
+            id="collapseMapType"
+            class="accordion-collapse collapse show"
+            aria-labelledby="map-type-header"
+            data-bs-parent="#form-accordion"
+            style=""
+          >
+            <div class="accordion-body">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="mapTypesRadio"
+                id="map-type-option1"
+                value="single"
+                checked=""
+              />
+              <label class="form-check-label" for="map-type-option1"
+                >Single Level</label
+              >
+
+              <input
+                class="form-check-input"
+                type="radio"
+                name="mapTypesRadio"
+                id="map-type-option2"
+                value="multilevel"
+                checked=""
+              />
+              <label class="form-check-label" for="map-type-option2"
+                >Multi Level</label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item" id="map-info">
+          <h2 class="accordion-header" id="map-info-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseMapInfo"
+              aria-expanded="false"
+              aria-controls="collapseMapInfo"
+            >
+              Map Information
+            </button>
+          </h2>
+          <div
+            id="collapseMapInfo"
+            class="accordion-collapse collapse"
+            aria-labelledby="map-info-header"
+            data-bs-parent="#form-accordion"
+            style=""
+          >
+            <div class="accordion-body">
+              <div class="form-group">
+                <div class="form-floating mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="map-code-input"
+                    placeholder="Map Code"
+                    required
+                  />
+                  <label for="map-code-input">Map Code</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="map-creator-input"
+                    placeholder="Map Creators"
+                    required
+                  />
+                  <label for="map-creator-input">Map Creators</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item" id="init-checkpoint">
+          <h2 class="accordion-header" id="init-checkpoint-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseInitCheckpoint"
+              aria-expanded="false"
+              aria-controls="collapseInitCheckpoint"
+            >
+              Starting Checkpoint/Level Select
+            </button>
+          </h2>
+          <div
+            id="collapseInitCheckpoint"
+            class="accordion-collapse collapse"
+            aria-labelledby="init-checkpoint-header"
+            data-bs-parent="#form-accordion"
+            style=""
+          >
+            <div class="accordion-body">
+              <form id="init-vector-form">
+                <div id="init-checkpoint-vector" class="row">
+                  <div class="col-md-4">
+                    <label for="initCheckpointVectorX" class="form-label"
+                      >X</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control is-invalid"
+                      id="initCheckpointVectorX"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label" for="initCheckpointVectorY"
+                      >Y</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control is-invalid"
+                      id="initCheckpointVectorY"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label" for="initCheckpointVectorZ"
+                      >Z</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control is-invalid"
+                      id="initCheckpointVectorZ"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item" id="levels">
+          <h2 class="accordion-header" id="levels-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseLevels"
+              aria-expanded="false"
+              aria-controls="collapseLevels"
+            >
+              Levels (Add/Remove/Select)
+            </button>
+          </h2>
+          <div
+            id="collapseLevels"
+            class="accordion-collapse collapse"
+            aria-labelledby="levels-header"
+            data-bs-parent="#form-accordion"
+            style=""
+          >
+            <div class="accordion-body">
+
+              <div
+                      class="btn-toolbar"
+                      role="toolbar"
+                      aria-label="Toolbar with button groups"
+              >
+                <div
+                        class="btn-group me-2"
+                        role="group"
+                        aria-label="First group"
+                        id="levels-list-buttons"
+                ></div>
+              </div>
+              <button
+                      id="add-level-btn"
+                      type="button"
+                      class="btn btn-primary"
+                      onclick="$('#level-modal').modal('show');//addLevelToList();"
+              >
+                Add Level
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item" id="checkpoints">
+          <h2 class="accordion-header" id="checkpoints-header">
+            <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseCheckpoints"
+                    aria-expanded="false"
+                    aria-controls="collapseCheckpoints"
+            >
+              Current Level Checkpoints
+            </button>
+          </h2>
+          <div
+                  id="collapseCheckpoints"
+                  class="accordion-collapse collapse"
+                  aria-labelledby="checkpoints-header"
+                  data-bs-parent="#form-accordion"
+                  style=""
+          >
+            <div class="accordion-body">
+
+              <div
+                      class="btn-toolbar"
+                      role="toolbar"
+                      aria-label="Toolbar with button groups"
+              >
+                <div
+                        class="btn-group me-2"
+                        role="group"
+                        aria-label="First group"
+                        id="checkpoint-list-buttons"
+                ></div>
+              </div>
+              <button
+                      id="add-checkpoint-bt"
+                      type="button"
+                      class="btn btn-primary"
+
+              >
+                Add Checkpoint
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
